@@ -1,0 +1,14 @@
+# global
+node_modules
+.env
+.env.local
+
+# editor
+.vscode
+
+# prisma
+prisma/.env
+
+# build
+.next
+dist
