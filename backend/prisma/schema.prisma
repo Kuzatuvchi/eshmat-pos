@@ -14,14 +14,17 @@ enum Role {
 
 model User {
   id           String   @id @default(cuid())
+  fullName     String
   login        String   @unique
   passwordHash String
   role         Role     @default(CASHIER)
+  isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  sales        Sale[]   @relation("UserSales")
 
+  sales        Sale[]   @relation("UserSales")
 }
+
 
 model Customer {
   id        String   @id @default(cuid())

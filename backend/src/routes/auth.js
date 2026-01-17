@@ -35,3 +35,25 @@ authRouter.post("/login", async (req, res) => {
 
   res.json({ token, user: { id: user.id, role: user.role, fullName: user.fullName, login: user.login } });
 });
+
+// POST /auth/seed-admin  (FAKAT 1 MARTA, keyin o‘chiramiz)
+authRouter.post("/seed-admin", async (req, res) => {
+  const { login, password, fullName } = req.body || {};
+  if (!login || !password) return res.status(400).json({ error: "LOGIN_PASSWORD_REQUIRED" });
+
+  const exists = await prisma.user.findUnique({ where: { login } });
+  if (exists) return res.status(400).json({ error: "USER_ALREADY_EXISTS" });
+
+  const passwordHash = await bcrypt.hash(password, 10);
+  const user = await prisma.user.create({
+    data: {
+      login,
+      fullName: fullName || "Admin",
+      passwordHash,
+      role: "ADMIN",
+      isActive: true
+    }
+  });
+
+  res.json({ ok: true, id: user.id, login: user.login });
+});
