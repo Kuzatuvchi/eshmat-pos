@@ -1,6 +1,9 @@
 {
   "name": "eshmat-pos-backend",
   "version": "1.0.0",
+  "prisma": {
+  "schema": "prisma/schema.prisma"
+ },
   "private": true,
   "type": "module",
   "scripts": {
