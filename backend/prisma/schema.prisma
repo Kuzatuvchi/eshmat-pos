@@ -19,6 +19,8 @@ model User {
   role         Role     @default(CASHIER)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  sales        Sale[]   @relation("UserSales")
+
 }
 
 model Customer {
@@ -60,7 +62,7 @@ model Sale {
   customer    Customer? @relation(fields: [customerId], references: [id])
 
   cashierId   String?
-  cashier     User?     @relation(fields: [cashierId], references: [id])
+  cashier     User?     @relation("UserSales", fields: [cashierId], references: [id])
 
   items       SaleItem[]
 }
