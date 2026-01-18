@@ -1,4 +1,5 @@
-const API = process.env.NEXT_PUBLIC_API_URL;
+const API =
+  process.env.NEXT_PUBLIC_API_URL || "https://eshmat-pos.onrender.com";
 
 
 export async function getMe() {
