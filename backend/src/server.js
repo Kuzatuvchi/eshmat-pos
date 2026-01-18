@@ -13,40 +13,27 @@ import { debtsRouter } from "./routes/debts.js";
 import { reportsRouter } from "./routes/reports.js";
 import { authRequired } from "./middleware/auth.js";
 
-const allow = [
-  "https://eshmat-9vkmils8a-sarvarbeks-projects-9923857e.vercel.app",
-   /^https:\/\/eshmat-.*\.vercel\.app$/,
-];
-
 const app = express();
 
 app.use(helmet());
-app.use(express.json({ limit: "1mb" }));
 app.use(morgan("dev"));
+
+// ✅ CORS — beta uchun eng oson va 100% ishlaydi
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
-      if (
-        allow.some(o =>
-          o instanceof RegExp ? o.test(origin) : o === origin
-        )
-      ) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
+    origin: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
+// ✅ Preflight (OPTIONS) ni ham alohida qo‘llab yuboramiz
+app.options("*", cors());
 
+app.use(express.json({ limit: "1mb" }));
 
 app.get("/", (req, res) => {
-  res.json({ ok: true, app: process.env.APP_NAME });
+  res.json({ ok: true, app: process.env.APP_NAME || "eshmat-pos" });
 });
 
 app.use("/auth", authRouter);
